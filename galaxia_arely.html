@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arely ✨</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  overflow:hidden;
+  background:black;
+  height:100vh;
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+.contenido{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  color:white;
+  z-index:10;
+  padding:20px;
+}
+
+h1{
+  font-size:4rem;
+  text-shadow:0 0 20px #8ab4ff;
+  animation:brillo 3s infinite alternate;
+}
+
+p{
+  margin-top:20px;
+  font-size:1.15rem;
+  max-width:700px;
+  line-height:1.8;
+  color:#d6e4ff;
+  text-shadow:0 0 10px rgba(255,255,255,0.5);
+  animation:flotar 5s ease-in-out infinite;
+}
+
+.corazon{
+  margin-top:25px;
+  font-size:3rem;
+  animation:latido 1.5s infinite;
+  color:#ff4d88;
+}
+
+.mensaje{
+  position:absolute;
+  color:white;
+  font-size:14px;
+  opacity:0.6;
+  animation:caer linear infinite;
+  pointer-events:none;
+}
+
+.constelacion{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  border-radius:50%;
+  box-shadow:0 0 10px white;
+}
+
+.cometa{
+  position:absolute;
+  width:3px;
+  height:3px;
+  background:white;
+  border-radius:50%;
+  box-shadow:0 0 20px white;
+  animation:cometa 5s linear infinite;
+}
+
+@keyframes brillo{
+  from{ text-shadow:0 0 10px #8ab4ff; }
+  to{ text-shadow:0 0 35px #ffffff; }
+}
+
+@keyframes latido{
+  0%{ transform:scale(1); }
+  50%{ transform:scale(1.2); }
+  100%{ transform:scale(1); }
+}
+
+@keyframes flotar{
+  0%{ transform:translateY(0px); }
+  50%{ transform:translateY(-10px); }
+  100%{ transform:translateY(0px); }
+}
+
+@keyframes caer{
+  from{
+    transform:translateY(-100px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(110vh);
+    opacity:0.7;
+  }
+}
+
+@keyframes cometa{
+  from{
+    transform:translate(-200px,-200px);
+    opacity:1;
+  }
+  to{
+    transform:translate(120vw,120vh);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="galaxy"></canvas>
+
+<div class="contenido">
+  <h1>Arely ✨</h1>
+
+  <p>
+    Aunque todavía no pueda abrazarte en persona,
+    siento que el universo me volvió a conectar contigo.
+    Después de alejarnos, regresaste como una estrella
+    que nunca dejó de brillar dentro de mí.
+    <br><br>
+    Y aunque la distancia exista,
+    cada noche miro el cielo imaginando que,
+    en alguna parte,
+    tú también estás viendo las mismas estrellas.
+    <br><br>
+    Ojalá algún día esta galaxia deje de ser distancia
+    y se convierta en nuestro lugar.
+  </p>
+
+  <div class="corazon">❤</div>
+</div>
+
+<audio autoplay loop>
+  <source src="https://files.catbox.moe/8p8s3m.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const canvas = document.getElementById('galaxy');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let estrellas = [];
+
+for(let i=0;i<500;i++){
+  estrellas.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*2,
+    d:Math.random()*0.5
+  });
+}
+
+function dibujar(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle='white';
+
+  estrellas.forEach(e=>{
+    ctx.beginPath();
+    ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+    ctx.fill();
+
+    e.y += e.d;
+
+    if(e.y > canvas.height){
+      e.y = 0;
+      e.x = Math.random()*canvas.width;
+    }
+  });
+
+  requestAnimationFrame(dibujar);
+}
+
+const frases = [
+  'Te extraño ✨',
+  'Amor a distancia 💫',
+  'Volvimos ❤',
+  'Arely 🌙',
+  'I wanna be yours',
+  'Algún día nos veremos ⭐'
+];
+
+function crearMensaje(){
+  const msg = document.createElement('div');
+  msg.classList.add('mensaje');
+  msg.innerText = frases[Math.floor(Math.random()*frases.length)];
+
+  msg.style.left = Math.random()*100 + 'vw';
+  msg.style.animationDuration = (5 + Math.random()*10) + 's';
+
+  document.body.appendChild(msg);
+
+  setTimeout(()=>{
+    msg.remove();
+  },15000);
+}
+
+setInterval(crearMensaje,1000);
+
+for(let i=0;i<40;i++){
+  const estrella = document.createElement('div');
+  estrella.classList.add('constelacion');
+
+  estrella.style.left = Math.random()*100 + 'vw';
+  estrella.style.top = Math.random()*100 + 'vh';
+
+  document.body.appendChild(estrella);
+}
+
+function crearCometa(){
+  const cometa = document.createElement('div');
+  cometa.classList.add('cometa');
+
+  cometa.style.top = Math.random()*50 + 'vh';
+  cometa.style.left = '-100px';
+
+  document.body.appendChild(cometa);
+
+  setTimeout(()=>{
+    cometa.remove();
+  },5000);
+}
+
+setInterval(crearCometa,2500);
+
+canvas.addEventListener('touchmove',(e)=>{
+  for(let i=0;i<5;i++){
+    estrellas.push({
+      x:e.touches[0].clientX + Math.random()*20,
+      y:e.touches[0].clientY + Math.random()*20,
+      r:Math.random()*3,
+      d:Math.random()*1
+    });
+  }
+});
+
+canvas.addEventListener('click',(e)=>{
+  for(let i=0;i<30;i++){
+    estrellas.push({
+      x:e.clientX,
+      y:e.clientY,
+      r:Math.random()*3,
+      d:Math.random()*1
+    });
+  }
+});
+
+window.addEventListener('resize',()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
+window.addEventListener('click',()=>{
+  document.querySelector('audio').play();
+});
+
+dibujar();
+</script>
+
+</body>
+</html>
